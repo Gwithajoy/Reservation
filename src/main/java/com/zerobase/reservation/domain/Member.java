@@ -1,7 +1,9 @@
 package com.zerobase.reservation.domain;
 
+import com.zerobase.reservation.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+
 
 @Entity
 @Table(name = "members")
