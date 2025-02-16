@@ -1,4 +1,4 @@
-package com.zerobase.reservation.service;
+package com.zerobase.reservation.serviceTest;
 
 import com.zerobase.reservation.domain.Member;
 import com.zerobase.reservation.domain.Review;
@@ -23,7 +23,15 @@ public class ReviewService {
     private final MemberRepository memberRepository;
 
     /**
-     * 리뷰 작성: 예약 완료된 사용자만 작성 가능
+     * 리뷰 작성 메서드
+     *
+     * 예약 이력이 COMPLETED 상태인 경우에만 사용자가 해당 매장에 대한 리뷰를 작성할 수 있습니다.
+     * 해당 매장 및 회원 정보를 조회하고, 리뷰 정보를 생성하여 저장합니다.
+     *
+     * @param request: 리뷰 작성 요청 DTO (storeId, rating, content)
+     * @param memberId: 리뷰를 작성하는 회원의 ID
+     * @return 저장된 Review 엔티티
+     * @throws RuntimeException 예약 이력이 없는 경우 예외 발생
      */
     public Review createReview(ReviewRequest request, Long memberId) {
         Member member = memberRepository.findById(memberId)
@@ -47,7 +55,16 @@ public class ReviewService {
     }
 
     /**
-     * 리뷰 수정: 작성자만 수정 가능
+     * 리뷰 수정 메서드
+     *
+     * 리뷰 작성자만 리뷰를 수정할 수 있습니다.
+     * 리뷰를 조회한 후, 작성자가 일치하면 평점 및 내용을 업데이트합니다.
+     *
+     * @param reviewId: 수정할 리뷰의 ID
+     * @param request: 수정 요청 DTO (storeId, rating, content)
+     * @param memberId: 리뷰 작성자의 ID
+     * @return 업데이트된 Review 엔티티
+     * @throws RuntimeException 리뷰가 존재하지 않거나 수정 권한이 없는 경우 예외 발생
      */
     public Review updateReview(Long reviewId, ReviewRequest request, Long memberId) {
         Review review = reviewRepository.findById(reviewId)
@@ -62,7 +79,14 @@ public class ReviewService {
     }
 
     /**
-     * 리뷰 삭제: 작성자 또는 매장 관리자(점장)만 삭제 가능
+     * 리뷰 삭제 메서드
+     *
+     * 리뷰 삭제는 리뷰 작성자 또는 해당 매장의 소유자(점장)만 수행할 수 있습니다.
+     * 삭제 권한이 없는 경우 예외를 발생시킵니다.
+     *
+     * @param reviewId: 삭제할 리뷰의 ID
+     * @param memberId: 요청한 회원의 ID
+     * @throws RuntimeException 삭제 권한이 없는 경우 예외 발생
      */
     public void deleteReview(Long reviewId, Long memberId) {
         Review review = reviewRepository.findById(reviewId)

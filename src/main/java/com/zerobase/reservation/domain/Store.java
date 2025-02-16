@@ -18,7 +18,7 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "store_name")  // 컬럼명을 명시적으로 지정
+    @Column(name = "store_name")
     private String storeName;
 
     private String description;

@@ -1,4 +1,4 @@
-package com.zerobase.reservation.service;
+package com.zerobase.reservation.serviceTest;
 
 import com.zerobase.reservation.domain.Member;
 import com.zerobase.reservation.domain.Reservation;

@@ -1,8 +1,7 @@
-package com.zerobase.reservation.service;
+package com.zerobase.reservation.serviceTest;
 
 import com.zerobase.reservation.domain.Member;
 import com.zerobase.reservation.dto.request.MemberRegisterRequest;
-import com.zerobase.reservation.enums.Role;
 import com.zerobase.reservation.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,10 +15,14 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     /**
-     * 회원가입 처리: 중복 이메일 체크, 비밀번호 암호화 후 회원 저장
+     * 회원가입 처리 메서드
      *
-     * @param request 회원가입 요청 DTO (email, password, name, phone, role)
+     * 클라이언트로부터 회원가입 요청 정보를 받아, 이메일 중복 체크를 진행한 후
+     * 비밀번호를 암호화하여 회원 정보를 저장합니다.
+     *
+     * @param request: 회원가입 요청 DTO (email, password, name, phone, role)
      * @return 저장된 Member 엔티티
+     * @throws RuntimeException: 이미 사용 중인 이메일인 경우 예외 발생
      */
     public Member register(MemberRegisterRequest request) {
         if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -35,4 +38,3 @@ public class MemberService {
         return memberRepository.save(member);
     }
 }
-

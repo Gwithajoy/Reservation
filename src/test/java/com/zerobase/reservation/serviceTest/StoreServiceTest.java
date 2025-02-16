@@ -1,4 +1,4 @@
-package com.zerobase.reservation.service;
+package com.zerobase.reservation.serviceTest;
 
 import com.zerobase.reservation.domain.Member;
 import com.zerobase.reservation.enums.Role;
@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -17,6 +17,10 @@ public class ReviewResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    /**
+     * Review 엔티티 객체를 기반으로 ReviewResponse DTO를 생성하는 생성자입니다.
+     * @param review Review 엔티티 객체
+     */
     public ReviewResponse(Review review) {
         this.id = review.getId();
         this.storeId = review.getStore().getId();

@@ -1,4 +1,4 @@
-package com.zerobase.reservation.contoller;
+package com.zerobase.reservation.controllerTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerobase.reservation.domain.Member;
