@@ -21,7 +21,11 @@
   - **Spring Data JPA (Hibernate)**
   - **Spring Security** (JWT 인증/인가)
   - **MariaDB or MySQL**
-  - **Gradle**  
+  - **Gradle**
+
+### 1.1. ERD
+![image](https://github.com/user-attachments/assets/dba41116-62e0-4206-8464-bb147fec5e97)
+
 
 ---
 
@@ -99,26 +103,29 @@ reservation
 | DELETE | `/api/reviews/{reviewId}?memberId={id}`  | 리뷰 삭제 (작성자 또는 매장 관리자 가능)     | -                                                               |
 
 
+
 ---
-##5.테스트
+## 5.테스트
 단위 테스트: 서비스 계층의 로직을 검증하기 위해 JUnit5와 Mockito를 사용합니다.
 통합 테스트: REST API 엔드포인트 검증을 위해 Spring Boot의 MockMvc를 사용합니다.
 예: MemberControllerTest, StoreControllerTest, ReservationControllerTest, ReviewControllerTest
 
+
 ---
-##6.JWT 인증 방식
+## 6.JWT 인증 방식
 - 사용자가 로그인에 성공하면, 서버는 JWT 토큰을 발급합니다.
 - 클라이언트는 이후 API 호출 시 Authorization 헤더에 아래 형식으로 토큰을 포함시킵니다.
 ```Authorization: Bearer <JWT토큰>```
 - 토큰 발급 및 검증은 JwtTokenProvider에서 관리하며, 비밀 키(JWT_SECRET)와 만료 기간(JWT_EXPIRATION)을 기반으로 합니다.
 
+
 ---
-##7.기여 방법
+## 7.기여 방법
 - Fork 저장소
 - 새로운 브랜치를 생성하여 기능 추가 또는 버그 수정을 진행
 - 변경 사항을 커밋한 후 Pull Request를 생성
 
 
 ---
-##8.문의
+## 8.문의
 이메일: gleewithajoy@gmail.com
