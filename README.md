@@ -44,6 +44,7 @@ reservation
  ┣ build.gradle
  ┣ README.md
  ┗ ...
+```
 
 - **com.zerobase.reservation.domain:** 엔티티 클래스 (예: Member, Store, Reservation, Review 등)
 - **com.zerobase.reservation.repository:** JPA Repository 인터페이스
@@ -108,7 +109,7 @@ reservation
 ##6.JWT 인증 방식
 - 사용자가 로그인에 성공하면, 서버는 JWT 토큰을 발급합니다.
 - 클라이언트는 이후 API 호출 시 Authorization 헤더에 아래 형식으로 토큰을 포함시킵니다.
-"""Authorization: Bearer <JWT토큰>"""
+```Authorization: Bearer <JWT토큰>```
 - 토큰 발급 및 검증은 JwtTokenProvider에서 관리하며, 비밀 키(JWT_SECRET)와 만료 기간(JWT_EXPIRATION)을 기반으로 합니다.
 
 ---
