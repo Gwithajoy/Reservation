@@ -22,11 +22,11 @@
   - **Spring Security** (JWT 인증/인가)
   - **MariaDB or MySQL**
   - **Gradle**
-
+---
 ### 1.1. ERD
 ![image](https://github.com/user-attachments/assets/dba41116-62e0-4206-8464-bb147fec5e97)
 
-
+<p>
 ---
 
 ## 2. 폴더 구조
