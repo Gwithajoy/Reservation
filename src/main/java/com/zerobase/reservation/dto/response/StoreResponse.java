@@ -8,16 +8,19 @@ import lombok.Setter;
 @Setter
 public class StoreResponse {
     private Long id;
-    private String storeName;
+
+
+
+    private String store_name;
     private String location;
     private String description;
-    private Long ownerId;
+    private Long owner_id;
 
     public StoreResponse(Store store) {
         this.id = store.getId();
-        this.storeName = store.getStoreName();
+        this.store_name = store.getStoreName();
         this.location = store.getLocation();
         this.description = store.getDescription();
-        this.ownerId = store.getOwner().getId();
+        this.owner_id = store.getOwner().getId();
     }
 }

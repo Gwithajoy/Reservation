@@ -21,7 +21,7 @@ public class Review {
 
     // 리뷰 대상 매장
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sotre_id")
+    @JoinColumn(name = "store_id")
     private Store store;
 
     // 리뷰 작성자

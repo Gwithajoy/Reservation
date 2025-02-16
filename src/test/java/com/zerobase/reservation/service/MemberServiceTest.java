@@ -1,16 +1,14 @@
-package com.zerobase.reservation;
+package com.zerobase.reservation.service;
 
 import com.zerobase.reservation.domain.Member;
 import com.zerobase.reservation.enums.Role;
 import com.zerobase.reservation.dto.request.MemberRegisterRequest;
-import com.zerobase.reservation.exception.CustomException;
 import com.zerobase.reservation.repository.MemberRepository;
-import com.zerobase.reservation.service.MemberService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -19,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 public class MemberServiceTest {
 
     @Mock
@@ -31,18 +28,26 @@ public class MemberServiceTest {
     @InjectMocks
     private MemberService memberService;
 
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
     @Test
-    void register_success() {
+    public void register_success() {
         // given
         MemberRegisterRequest request = new MemberRegisterRequest();
         request.setEmail("test@example.com");
         request.setPassword("password");
-        request.setName("홍길동");
-        request.setPhone("010-1234-5678");
+        request.setName("Test User");
+        request.setPhone("123-4567");
         request.setRole(Role.USER);
 
+        // 이메일 중복 확인: 없다고 가정
         when(memberRepository.findByEmail("test@example.com")).thenReturn(Optional.empty());
+        // 비밀번호 암호화
         when(passwordEncoder.encode("password")).thenReturn("encryptedPassword");
+        // 저장 시 ID 부여
         when(memberRepository.save(any(Member.class))).thenAnswer(invocation -> {
             Member m = invocation.getArgument(0);
             m.setId(1L);
@@ -59,19 +64,24 @@ public class MemberServiceTest {
     }
 
     @Test
-    void register_duplicateEmail() {
+    public void register_duplicateEmail_throwsException() {
         // given
         MemberRegisterRequest request = new MemberRegisterRequest();
         request.setEmail("test@example.com");
         request.setPassword("password");
-        request.setName("홍길동");
-        request.setPhone("010-1234-5678");
+        request.setName("Test User");
+        request.setPhone("123-4567");
         request.setRole(Role.USER);
 
-        Member existingMember = Member.builder().id(1L).email("test@example.com").build();
+        Member existingMember = new Member();
+        existingMember.setId(1L);
+        existingMember.setEmail("test@example.com");
         when(memberRepository.findByEmail("test@example.com")).thenReturn(Optional.of(existingMember));
 
         // then
-        assertThrows(CustomException.class, () -> memberService.register(request));
+        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            memberService.register(request);
+        });
+        assertEquals("이미 사용 중인 이메일입니다.", thrown.getMessage());
     }
 }

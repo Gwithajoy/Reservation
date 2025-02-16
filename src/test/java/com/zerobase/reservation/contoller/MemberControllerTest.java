@@ -1,4 +1,4 @@
-package com.zerobase.reservation;
+package com.zerobase.reservation.contoller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerobase.reservation.dto.request.MemberRegisterRequest;

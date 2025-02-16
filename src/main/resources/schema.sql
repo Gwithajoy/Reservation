@@ -1,12 +1,5 @@
-USE reservation_db;
-
-# member 테이블 생성
-# id: 자동 증가하는 기본 키
-# email: 중복 불가능한 이메일
-# password: 암호화된 비밀번호
-# role: 'USER' 또는 'PARTNER' 값만 가질 수 있도록 ENUM으로 정의
-
-CREATE TABLE members (
+-- 회원(Member) 테이블 생성
+CREATE TABLE reservation_db.members (
                          id BIGINT AUTO_INCREMENT PRIMARY KEY,
                          email VARCHAR(255) NOT NULL UNIQUE,
                          password VARCHAR(255) NOT NULL,
@@ -15,56 +8,63 @@ CREATE TABLE members (
                          role ENUM('USER', 'PARTNER') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
-
-# store 테이블 생성
-# storeName: 매장 이름
-# description: 매장 설명
-# location: 매장 위치
-# owner_id: 매장 등록한 파트너(회원)의 id를 참조하는 외래키
-# createdAt, updatedAt: 생성/수정 시각
-CREATE TABLE stores (
+-- 매장(Store) 테이블 생성
+CREATE TABLE reservation_db.stores (
                         id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                        storeName VARCHAR(255) NOT NULL,
+                        store_name VARCHAR(255) NOT NULL,
                         description TEXT,
                         location VARCHAR(255) NOT NULL,
                         owner_id BIGINT NOT NULL,
-                        createdAt DATETIME NOT NULL,
-                        updatedAt DATETIME,
+                        created_at DATETIME NOT NULL,
+                        updated_at DATETIME,
                         CONSTRAINT fk_store_owner FOREIGN KEY (owner_id) REFERENCES members(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-# Reservations 테이블
-# store_id: 예약할 매장 id (stores 테이블의 외래키)
-# member_id: 예약을 진행한 사용자 id (members 테이블의 외래키)
-# reservationDateTime: 예약 일시
-# status: 예약 상태('REQUESTED', 'APPROVED', 'REJECTED', 'COMPLETED')
-CREATE TABLE reservations (
+-- 예약(Reservation) 테이블 생성
+CREATE TABLE reservation_db.reservations (
                               id BIGINT AUTO_INCREMENT PRIMARY KEY,
                               store_id BIGINT NOT NULL,
                               member_id BIGINT NOT NULL,
-                              reservationDateTime DATETIME NOT NULL,
+                              reservation_date_time DATETIME NOT NULL,
                               status ENUM('REQUESTED', 'APPROVED', 'REJECTED', 'COMPLETED') NOT NULL,
-                              createdAt DATETIME NOT NULL,
-                              updatedAt DATETIME,
-                              CONSTRAINT fk_reservation_store FOREIGN KEY (store_id) REFERENCES stores(id),
+                              created_at DATETIME NOT NULL,
+                              updated_at DATETIME,
+                              CONSTRAINT fk_reservation_store FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE CASCADE,
                               CONSTRAINT fk_reservation_member FOREIGN KEY (member_id) REFERENCES members(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
-# Reviews 테이블
-# store_id: 리뷰가 작성된 매장의 id (stores 테이블의 외래키)
-# member_id: 리뷰 작성자 id (members 테이블의 외래키)
-# rating: 별점 (정수)
-# content: 리뷰 내용
-CREATE TABLE reviews (
+-- 리뷰(Review) 테이블 생성
+CREATE TABLE reservation_db.reviews (
                          id BIGINT AUTO_INCREMENT PRIMARY KEY,
                          store_id BIGINT NOT NULL,
                          member_id BIGINT NOT NULL,
                          rating INT NOT NULL,
                          content TEXT,
-                         createdAt DATETIME NOT NULL,
-                         updatedAt DATETIME,
-                         CONSTRAINT fk_review_store FOREIGN KEY (store_id) REFERENCES stores(id),
+                         created_at DATETIME NOT NULL,
+                         updated_at DATETIME,
+                         CONSTRAINT fk_review_store FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE CASCADE,
                          CONSTRAINT fk_review_member FOREIGN KEY (member_id) REFERENCES members(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+-- 파트너 회원 생성 (이미 가입되어 있으면 생략)
+INSERT INTO reservation_db.members (email, password, name, phone, role)
+VALUES ('partner@exmaple.com', '암호화된비밀번호', '홍길동', '010-1111-2222', 'PARTNER');
+
+-- 매장 등록 (홍길동 회원의 id가 1이라고 가정)
+INSERT INTO reservation_db.stores (store_name, description, location, owner_id, created_at, updated_at)
+VALUES ('맛있는 한식당', '정갈한 한식 전문점입니다.', '서울 강남구', 1, NOW(), NOW());
+
+-- 예약 생성 (예약은 일반 회원에 의해 생성되어야 하므로 일반 회원도 필요합니다.)
+-- 일반 회원 생성 예시:
+INSERT INTO reservation_db.members (email, password, name, phone, role)
+VALUES ('user@example.com', '암호화된비밀번호', '김영희', '010-3333-4444', 'USER');
+
+-- 예약 생성 (일반 회원 id가 2라고 가정, 매장 id가 1)
+INSERT INTO reservation_db.reservations (store_id, member_id, reservation_date_time, status, created_at, updated_at)
+VALUES (1, 2, '2025-03-01 19:00:00', 'REQUESTED', NOW(), NOW());
+
+-- 리뷰 생성 (예약 후 리뷰 작성, 예시: 일반 회원 id 2, 매장 id 1)
+INSERT INTO reservation_db.reviews (store_id, member_id, rating, content, created_at, updated_at)
+VALUES (1, 2, 5, '매우 만족스러운 경험이었습니다.', NOW(), NOW());
