@@ -1,9 +1,8 @@
 package com.zerobase.reservation.domain;
 
-
+import com.zerobase.reservation.enums.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
 
 import java.time.LocalDateTime;
 
@@ -15,16 +14,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Reservation {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
+    private Store store;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
 
-    private LocalDateTime reservationTime;
+    private LocalDateTime reservationDateTime;
 
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
